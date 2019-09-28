@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Reddit Playlist Maker</title>
+  <meta name="description" content="Reddit Playlist Maker">
+  <meta name="author" content="Sadra Dowlatshahi">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  
+ <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
+
+</head>
+
+<body>
+<h1> <a href="/">create a new list</a></h1>
+<form  action="" method="get">
+    <label for="GET-name">New Link:</label>
+    <span id="newLink"> </span>
+    <input type="submit" value="Add">
+</form>
+
+  <ul id="links">
+
+  </ul>
+
+  <script type="text/javascript">
+    var searchParams = new URLSearchParams(window.location.search);
+
+    var keys = searchParams.keys();
+    keyLength = [...keys].length;
+    console.log('keyLength: ', keyLength);
+    $("#newLink").html(
+        '<input id="GET-name" type="text" name="'+ (keyLength+1) + '">'
+    );
+// post
+// action
+    $('form').attr('action', searchParams.toString());
+    let input = $('#GET-name');
+    //option A
+    $("form").submit(function(e){
+        e.preventDefault();
+
+        var cleanString = input.val();
+        cleanString = cleanString.replace( "https://www.reddit.com/", "");
+        var n2 = cleanString.search("&");
+        while(n2 > -1){
+        cleanString = cleanString.replace( "&", "\+\+");
+        n2--;
+        }
+       // console.log('cleanString', cleanString);
+        window.location.href = '?'+ searchParams.toString() + '&'+ input.attr("name") + "=" + cleanString ;
+        
+    });
+
+
+var entries = searchParams.entries();
+
+for(pair of entries) { 
+    var str2 = pair[1];
+    var n = str2.search("r/");
+
+    if(pair[0] == 'm'|| n == -1){}else{
+    var n3 =  str2.search("  ");
+    while(n3 > -1){
+    str2 = str2.replace( "  ", "&");
+    n3--;
+    }
+
+  $("#links").append("<li><a href='https://www.reddit.com/" + str2 + "'> " + str2 + "</a></li>");
+}
+}
+  </script>
+</body>
+</html>
